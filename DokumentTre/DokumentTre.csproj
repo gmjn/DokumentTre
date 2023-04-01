@@ -5,12 +5,8 @@
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationIcon>Content\Icon.ico</ApplicationIcon>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content Include="Icon.ico" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
@@ -19,6 +15,25 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DocumentRepository\DocumentRepository.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Content\Icon.ico" />
+    <Resource Include="Content\AlignCenter.png" />
+    <Resource Include="Content\AlignLeft.png" />
+    <Resource Include="Content\AlignRight.png" />
+    <Resource Include="Content\Bold.png" />
+    <Resource Include="Content\BulletsList.png" />
+    <Resource Include="Content\Folder.png" />
+    <Resource Include="Content\Image.png" />
+    <Resource Include="Content\Italic.png" />
+    <Resource Include="Content\NumbersList.png" />
+    <Resource Include="Content\Pdf.png" />
+    <Resource Include="Content\Redo.png" />
+    <Resource Include="Content\RichText.png" />
+    <Resource Include="Content\Text.png" />
+    <Resource Include="Content\Underline.png" />
+    <Resource Include="Content\Undo.png" />
   </ItemGroup>
 
 </Project>

@@ -15,8 +15,8 @@ public partial class MainView : Window
     {
         InitializeComponent();
 
-        Width = Math.Floor(SystemParameters.PrimaryScreenWidth * 80 / 100);
-        Height = Math.Floor(SystemParameters.PrimaryScreenHeight * 80 / 100);
+        Width = Math.Floor(SystemParameters.PrimaryScreenWidth * 90 / 100);
+        Height = Math.Floor(SystemParameters.PrimaryScreenHeight * 90 / 100);
 
         _viewModel = viewModel;
         DataContext = _viewModel;

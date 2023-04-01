@@ -62,9 +62,9 @@ public partial class TextEditView : Window, ITextEditViewModel
     {
         if (_textIsChanged && DialogResult != true)
         {
-            MessageBoxResult answer = MessageBox.Show(this, "Er du sikker på at du vil lukke uten å lagre endring?", "Bekreft lukking", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+            MessageBoxResult answer = MessageBox.Show(this, "Er du sikker på at du vil lukke uten å lagre endring?", "Bekreft lukking", MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel);
 
-            if (answer != MessageBoxResult.Yes)
+            if (answer != MessageBoxResult.OK)
             {
                 e.Cancel = true;
             }

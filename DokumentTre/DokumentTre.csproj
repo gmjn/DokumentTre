@@ -9,8 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Content\Html.png" />
+    <None Remove="Content\RichText.png" />
+    <None Remove="Content\StrikeThrough.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1661.34" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,12 +32,14 @@
     <Resource Include="Content\Bold.png" />
     <Resource Include="Content\BulletsList.png" />
     <Resource Include="Content\Folder.png" />
+    <Resource Include="Content\Html.png" />
     <Resource Include="Content\Image.png" />
     <Resource Include="Content\Italic.png" />
     <Resource Include="Content\NumbersList.png" />
     <Resource Include="Content\Pdf.png" />
     <Resource Include="Content\Redo.png" />
     <Resource Include="Content\RichText.png" />
+    <Resource Include="Content\StrikeThrough.png" />
     <Resource Include="Content\Text.png" />
     <Resource Include="Content\Underline.png" />
     <Resource Include="Content\Undo.png" />

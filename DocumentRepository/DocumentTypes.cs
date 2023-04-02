@@ -6,5 +6,7 @@ public enum DocumentTypes
     PlainText,
     JpgImage,
     PngImage,
-    RichTextDocument
+    RichTextDocument,
+    HtmlDocument,
+    PdfDocument
 }

@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
         <TextBlock Text="Navn:" Margin="10"/>
         <TextBox x:Name="TextBoxName" Margin="10" Grid.Column="1" Grid.ColumnSpan="3" TextChanged="TextBoxName_TextChanged"/>
-        <TextBox x:Name="TextBoxContent" Margin="10,0" Grid.ColumnSpan="4" Grid.Row="1" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" VerticalScrollBarVisibility="Auto" TextChanged="TextBoxContent_TextChanged"/>
+        <TextBox x:Name="TextBoxContent" FontSize="14" Margin="10,0" Grid.ColumnSpan="4" Grid.Row="1" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" VerticalScrollBarVisibility="Auto" TextChanged="TextBoxContent_TextChanged"/>
         <Button x:Name="ButtonOk" Content="OK" IsEnabled="False" Width="100" Height="20" Margin="10" Grid.Column="2" Grid.Row="2" Click="ButtonOk_Click"/>
         <Button Content="Avbryt" IsCancel="True" Width="100" Height="20" Margin="10" Grid.Column="3" Grid.Row="2"/>
     </Grid>

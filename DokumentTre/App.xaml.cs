@@ -29,12 +29,14 @@ public partial class App : Application
         services.AddTransient<ITextEditViewModel, TextEditView>();
         services.AddTransient<IRichTextEditViewModel, RichTextEditView>();
         services.AddTransient<IImageEditViewModel, ImageEditView>();
+        services.AddTransient<IHtmlEditViewModel, HtmlEditView>();
 
         // Windows factory
         services.AddSingleton<Func<IFolderEditViewModel>>(x => () => x.GetRequiredService<IFolderEditViewModel>());
         services.AddSingleton<Func<ITextEditViewModel>>(x => () => x.GetRequiredService<ITextEditViewModel>());
         services.AddSingleton<Func<IRichTextEditViewModel>>(x => () => x.GetRequiredService<IRichTextEditViewModel>());
         services.AddSingleton<Func<IImageEditViewModel>>(x => () => x.GetRequiredService<IImageEditViewModel>());
+        services.AddSingleton<Func<IHtmlEditViewModel>>(x => () => x.GetRequiredService<IHtmlEditViewModel>());
     }
 
     private void Application_Startup(object sender, StartupEventArgs e)

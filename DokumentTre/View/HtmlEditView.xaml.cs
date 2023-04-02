@@ -4,15 +4,18 @@ using System.Windows.Controls;
 
 namespace DokumentTre.View;
 
-public partial class FolderEditView : Window, IFolderEditViewModel
+public partial class HtmlEditView : Window, IHtmlEditViewModel
 {
     private bool _textIsChanged = false;
 
-    public FolderEditView(MainView owner)
+    public HtmlEditView(MainView owner)
     {
         InitializeComponent();
         Owner = owner;
         Icon = owner.Icon;
+        WindowState = owner.WindowState;
+        Width = owner.Width;
+        Height = owner.Height;
     }
 
     private void TextBoxName_TextChanged(object sender, TextChangedEventArgs e)
@@ -33,7 +36,7 @@ public partial class FolderEditView : Window, IFolderEditViewModel
         }
     }
 
-    string IFolderEditViewModel.Name
+    string IHtmlEditViewModel.Name
     {
         get
         {
@@ -45,7 +48,7 @@ public partial class FolderEditView : Window, IFolderEditViewModel
         }
     }
 
-    string IFolderEditViewModel.Text
+    string IHtmlEditViewModel.Html
     {
         get
         {

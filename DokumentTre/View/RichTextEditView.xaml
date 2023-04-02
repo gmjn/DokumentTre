@@ -37,6 +37,9 @@
             <Button HorizontalAlignment="Left" Margin="5" Style="{StaticResource MenuButtonStyle}" Command="EditingCommands.ToggleUnderline">
                 <Image Source="/Content/Underline.png" Height="16" Width="16"/>
             </Button>
+            <Button HorizontalAlignment="Left" Margin="5" Style="{StaticResource MenuButtonStyle}" Click="ButtonStrikeThrough_Click">
+                <Image Source="/Content/StrikeThrough.png" Height="16" Width="16"/>
+            </Button>
             <Separator/>
             <Button HorizontalAlignment="Left" Margin="5" Style="{StaticResource MenuButtonStyle}" Command="EditingCommands.AlignLeft">
                 <Image Source="/Content/AlignLeft.png" Height="16" Width="16"/>

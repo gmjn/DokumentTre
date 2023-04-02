@@ -65,6 +65,9 @@ public class FolderElement : BaseElement
                 case DocumentTypes.RichTextDocument:
                     Children.Add(new RichTextElement(Child, this));
                     break;
+                case DocumentTypes.HtmlDocument:
+                    Children.Add(new HtmlElement(Child, this));
+                    break;
                 default:
                     throw new Exception("Database error.");
             }
@@ -91,6 +94,16 @@ public class FolderElement : BaseElement
         return textElement;
     }
 
+    public async Task<RichTextElement> AddRichTextAsync(string name, byte[] richTextData)
+    {
+        RichTextElement richTextElement = new(await DatabaseElement.CreateChildAsync(name, DocumentTypes.RichTextDocument, richTextData), this);
+        Children.Add(richTextElement);
+        IsExpanded = true;
+        richTextElement.IsSelected = true;
+
+        return richTextElement;
+    }
+
     public async Task<ImageElement> AddImageAsync(string name, DocumentTypes documentType, byte[] image)
     {
         ImageElement imageElement = new(await DatabaseElement.CreateChildAsync(name, documentType, image), this);
@@ -101,14 +114,14 @@ public class FolderElement : BaseElement
         return imageElement;
     }
 
-    public async Task<RichTextElement> AddRichTextAsync(string name, byte[] richTextData)
+    public async Task<HtmlElement> AddHtmlAsync(string name, string html)
     {
-        RichTextElement richTextElement = new(await DatabaseElement.CreateChildAsync(name, DocumentTypes.RichTextDocument, richTextData), this);
-        Children.Add(richTextElement);
+        HtmlElement htmlElement = new(await DatabaseElement.CreateChildAsync(name, DocumentTypes.HtmlDocument, EncodeString(html)), this);
+        Children.Add(htmlElement);
         IsExpanded = true;
-        richTextElement.IsSelected = true;
+        htmlElement.IsSelected = true;
 
-        return richTextElement;
+        return htmlElement;
     }
 
     public async Task DeleteChildAsync(BaseElement child)

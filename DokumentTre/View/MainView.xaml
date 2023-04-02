@@ -7,6 +7,7 @@
         xmlns:viewModel="clr-namespace:DokumentTre.ViewModel"
         xmlns:controls="clr-namespace:DokumentTre.View.Controls"
         xmlns:converters="clr-namespace:DokumentTre.View.Converters"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModel:MainViewModel, IsDesignTimeCreatable=False}"
         Title="Dokument Tre" Height="800" MinHeight="500" Width="1000" MinWidth="800" Loaded="Window_LoadedAsync" WindowStartupLocation="CenterScreen">
@@ -26,6 +27,7 @@
                         <MenuItem Header="Ren tekst" Command="{Binding NewPlainTextCommand}"/>
                         <MenuItem Header="Rik tekst" Command="{Binding NewRichTextCommand}"/>
                         <MenuItem Header="Bilde" Command="{Binding NewImageCommand}"/>
+                        <MenuItem Header="Html tekst" Command="{Binding NewHtmlCommand}"/>
                     </ContextMenu>
                 </controls:ContextMenuSelectButton.DropDown>
             </controls:ContextMenuSelectButton>
@@ -98,6 +100,13 @@
                     </StackPanel>
                 </DataTemplate>
 
+                <DataTemplate DataType="{x:Type model:HtmlElement}">
+                    <StackPanel Orientation="Horizontal" Margin="0,2,0,2">
+                        <Image Source="/Content/Html.png" Height="20" Width="20"/>
+                        <TextBlock Text="{Binding DatabaseElement.Name}" FontSize="14" VerticalAlignment="Center" Margin="5,0"/>
+                    </StackPanel>
+                </DataTemplate>
+
                 <Style TargetType="TreeViewItem">
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
@@ -149,6 +158,12 @@
                             </Style>
                         </RichTextBox.Resources>
                     </RichTextBox>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type model:HtmlElement}">
+                    <Border BorderThickness="1,1,1,1" BorderBrush="#FF828790" Margin="5,0,5,5">
+                        <wv2:WebView2 converters:WebView2HtmlHelper.HtmlDocument="{Binding Html, Mode=OneWay, IsAsync=True}"/>
+                    </Border>
                 </DataTemplate>
 
             </ContentControl.Resources>

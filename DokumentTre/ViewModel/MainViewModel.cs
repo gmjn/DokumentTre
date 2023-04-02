@@ -22,12 +22,14 @@ public class MainViewModel : ObservableObject
     private readonly Func<ITextEditViewModel> _getTextEdit;
     private readonly Func<IRichTextEditViewModel> _getRichTextEdit;
     private readonly Func<IImageEditViewModel> _getImageEdit;
+    private readonly Func<IHtmlEditViewModel> _getHtmlEdit;
 
     public IRelayCommand NewButtonCommand { get; }
     public ICommand NewFolderCommand { get; }
     public ICommand NewPlainTextCommand { get; }
     public ICommand NewImageCommand { get; }
     public ICommand NewRichTextCommand { get; }
+    public ICommand NewHtmlCommand { get; }
     public IAsyncRelayCommand EditCommand { get; }
     public IAsyncRelayCommand DeleteCommand { get; }
     public IAsyncRelayCommand VacuumCommand { get; }
@@ -65,13 +67,14 @@ public class MainViewModel : ObservableObject
         }
     }
 
-    public MainViewModel(IRepository documentDatabase, Func<IFolderEditViewModel> getFolderEdit, Func<ITextEditViewModel> getTextEdit, Func<IRichTextEditViewModel> getRichTextEdit, Func<IImageEditViewModel> getImageEdit)
+    public MainViewModel(IRepository documentDatabase, Func<IFolderEditViewModel> getFolderEdit, Func<ITextEditViewModel> getTextEdit, Func<IRichTextEditViewModel> getRichTextEdit, Func<IImageEditViewModel> getImageEdit, Func<IHtmlEditViewModel> getHtmlEdit)
     {
         _documentDatabase = documentDatabase;
         _getFolderEdit = getFolderEdit;
         _getTextEdit = getTextEdit;
         _getRichTextEdit = getRichTextEdit;
         _getImageEdit = getImageEdit;
+        _getHtmlEdit = getHtmlEdit;
         DocumentRoot = Array.Empty<FolderElement>();
 
         NewButtonCommand = new RelayCommand(() => { }, () => SelectedElement is FolderElement);
@@ -79,6 +82,7 @@ public class MainViewModel : ObservableObject
         NewPlainTextCommand = new AsyncRelayCommand(NewPlainText);
         NewImageCommand = new AsyncRelayCommand(NewImage);
         NewRichTextCommand = new AsyncRelayCommand(NewRichText);
+        NewHtmlCommand = new AsyncRelayCommand(NewHtmlText);
         EditCommand = new AsyncRelayCommand(Edit, () => SelectedElement is not null);
         DeleteCommand = new AsyncRelayCommand(Delete, () => SelectedElement is not null && SelectedElement.DatabaseElement.Id != 0);
         VacuumCommand = new AsyncRelayCommand(Vacuum);
@@ -161,6 +165,25 @@ public class MainViewModel : ObservableObject
         }
     }
 
+    private async Task NewRichText()
+    {
+        try
+        {
+            if (SelectedElement is FolderElement folder)
+            {
+                IRichTextEditViewModel richTextEdit = _getRichTextEdit();
+                if (richTextEdit.ShowDialog() == true)
+                {
+                    await folder.AddRichTextAsync(richTextEdit.Name, richTextEdit.Text);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            SendUiMessage?.Invoke(($"Ny feilet. Feilmelding:\n\n{ex.Message}", "Feilmelding", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK));
+        }
+    }
+
     private async Task NewImage()
     {
         try
@@ -173,7 +196,7 @@ public class MainViewModel : ObservableObject
                 {
                     if (imageEdit.Image is not null)
                     {
-                        await folder.AddImageAsync(imageEdit.Name, imageEdit.Image.Value.Item2, imageEdit.Image.Value.Item1);
+                        await folder.AddImageAsync(imageEdit.Name, imageEdit.Image.Value.type, imageEdit.Image.Value.data);
                     }
                 }
             }
@@ -184,16 +207,43 @@ public class MainViewModel : ObservableObject
         }
     }
 
-    private async Task NewRichText()
+    private async Task NewHtmlText()
     {
         try
         {
             if (SelectedElement is FolderElement folder)
             {
-                IRichTextEditViewModel richTextEdit = _getRichTextEdit();
-                if (richTextEdit.ShowDialog() == true)
+                IHtmlEditViewModel htmlEdit = _getHtmlEdit();
+
+                htmlEdit.Html = """
+                    <!DOCTYPE html>
+                    <html>
+                    <head></head>
+                    <body>
+                      <h1>Tittel</h1>
+                      <h3>Innhold 1</h3>
+                      <p>Her er innhold eksempel 1.<br>Her er innhold eksempel 2.</p>
+                      <h3>Innhold 2</h3>
+                      <p>Liste uten nummer.</p>
+                      <ul>
+                        <li>Kaffe</li>
+                        <li>Te</li>
+                        <li>Melk</li>
+                      </ul>
+                      <h3>Innhold 3</h3>
+                      <p>Liste med nummer.</p>
+                      <ol>
+                        <li>Kaffe</li>
+                        <li>Te</li>
+                        <li>Melk</li>
+                      </ol>
+                    </body>
+                    </html>
+                    """;
+
+                if (htmlEdit.ShowDialog() == true)
                 {
-                    await folder.AddRichTextAsync(richTextEdit.Name, richTextEdit.Text);
+                    await folder.AddHtmlAsync(htmlEdit.Name, htmlEdit.Html);
                 }
             }
         }
@@ -271,7 +321,7 @@ public class MainViewModel : ObservableObject
                 IImageEditViewModel imageEdit = _getImageEdit();
                 imageEdit.Name = image.DatabaseElement.Name;
                 imageEdit.Image = await Task.Run(() => image.Image);
-                DocumentTypes oldDocumentType = imageEdit.Image.Value.Item2;
+                DocumentTypes oldDocumentType = imageEdit.Image.Value.type;
 
                 if (imageEdit.ShowDialog() == true)
                 {
@@ -282,12 +332,32 @@ public class MainViewModel : ObservableObject
 
                     if (imageEdit.ImageIsChanged && imageEdit.Image.HasValue)
                     {
-                        if (oldDocumentType != imageEdit.Image.Value.Item2)
+                        if (oldDocumentType != imageEdit.Image.Value.type)
                         {
-                            await image.DatabaseElement.SetDocumentTypeAsync(imageEdit.Image.Value.Item2);
+                            await image.DatabaseElement.SetDocumentTypeAsync(imageEdit.Image.Value.type);
                         }
 
-                        await image.DatabaseElement.SetContentAsync(imageEdit.Image.Value.Item1);
+                        await image.DatabaseElement.SetContentAsync(imageEdit.Image.Value.data);
+                    }
+                }
+            }
+            else if (SelectedElement is HtmlElement html)
+            {
+                IHtmlEditViewModel htmlEdit = _getHtmlEdit();
+                htmlEdit.Name = html.DatabaseElement.Name;
+                string oldHtml = await html.GetHtmlAsync();
+                htmlEdit.Html = oldHtml;
+
+                if (htmlEdit.ShowDialog() == true)
+                {
+                    if (html.DatabaseElement.Name != htmlEdit.Name)
+                    {
+                        await html.DatabaseElement.SetNameAsync(htmlEdit.Name);
+                    }
+
+                    if (htmlEdit.Html != oldHtml)
+                    {
+                        await html.SetHtmlAsync(htmlEdit.Html);
                     }
                 }
             }

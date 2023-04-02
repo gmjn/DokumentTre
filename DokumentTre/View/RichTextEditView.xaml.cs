@@ -144,6 +144,24 @@ public partial class RichTextEditView : Window, IRichTextEditViewModel
         }
     }
 
+    private void ButtonStrikeThrough_Click(object sender, RoutedEventArgs e)
+    {
+        if (RichTextBoxContent.Selection is not null)
+        {
+            TextRange textRange = RichTextBoxContent.Selection;
+            var currentTextDecoration = textRange.GetPropertyValue(Inline.TextDecorationsProperty);
+
+            if (currentTextDecoration != DependencyProperty.UnsetValue)
+            {
+                textRange.ApplyPropertyValue(Inline.TextDecorationsProperty, ((TextDecorationCollection)currentTextDecoration == TextDecorations.Strikethrough) ? new TextDecorationCollection() : TextDecorations.Strikethrough);
+            }
+            else
+            {
+                textRange.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Strikethrough);
+            }
+        }
+    }
+
     private void Button_Font_Click(object sender, RoutedEventArgs e)
     {
         if (sender is Button button)

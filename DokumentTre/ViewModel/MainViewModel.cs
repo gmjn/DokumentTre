@@ -23,6 +23,7 @@ public class MainViewModel : ObservableObject
     private readonly Func<IRichTextEditViewModel> _getRichTextEdit;
     private readonly Func<IImageEditViewModel> _getImageEdit;
     private readonly Func<IHtmlEditViewModel> _getHtmlEdit;
+    private readonly Func<IPdfEditViewModel> _getPdfEdit;
 
     public IRelayCommand NewButtonCommand { get; }
     public ICommand NewFolderCommand { get; }
@@ -30,6 +31,7 @@ public class MainViewModel : ObservableObject
     public ICommand NewImageCommand { get; }
     public ICommand NewRichTextCommand { get; }
     public ICommand NewHtmlCommand { get; }
+    public ICommand NewPdfCommand { get; }
     public IAsyncRelayCommand EditCommand { get; }
     public IAsyncRelayCommand DeleteCommand { get; }
     public IAsyncRelayCommand VacuumCommand { get; }
@@ -67,7 +69,7 @@ public class MainViewModel : ObservableObject
         }
     }
 
-    public MainViewModel(IRepository documentDatabase, Func<IFolderEditViewModel> getFolderEdit, Func<ITextEditViewModel> getTextEdit, Func<IRichTextEditViewModel> getRichTextEdit, Func<IImageEditViewModel> getImageEdit, Func<IHtmlEditViewModel> getHtmlEdit)
+    public MainViewModel(IRepository documentDatabase, Func<IFolderEditViewModel> getFolderEdit, Func<ITextEditViewModel> getTextEdit, Func<IRichTextEditViewModel> getRichTextEdit, Func<IImageEditViewModel> getImageEdit, Func<IHtmlEditViewModel> getHtmlEdit, Func<IPdfEditViewModel> getPdfEdit)
     {
         _documentDatabase = documentDatabase;
         _getFolderEdit = getFolderEdit;
@@ -75,6 +77,7 @@ public class MainViewModel : ObservableObject
         _getRichTextEdit = getRichTextEdit;
         _getImageEdit = getImageEdit;
         _getHtmlEdit = getHtmlEdit;
+        _getPdfEdit = getPdfEdit;
         DocumentRoot = Array.Empty<FolderElement>();
 
         NewButtonCommand = new RelayCommand(() => { }, () => SelectedElement is FolderElement);
@@ -83,6 +86,7 @@ public class MainViewModel : ObservableObject
         NewImageCommand = new AsyncRelayCommand(NewImage);
         NewRichTextCommand = new AsyncRelayCommand(NewRichText);
         NewHtmlCommand = new AsyncRelayCommand(NewHtmlText);
+        NewPdfCommand = new AsyncRelayCommand(NewPdf);
         EditCommand = new AsyncRelayCommand(Edit, () => SelectedElement is not null);
         DeleteCommand = new AsyncRelayCommand(Delete, () => SelectedElement is not null && SelectedElement.DatabaseElement.Id != 0);
         VacuumCommand = new AsyncRelayCommand(Vacuum);
@@ -253,6 +257,29 @@ public class MainViewModel : ObservableObject
         }
     }
 
+    private async Task NewPdf()
+    {
+        try
+        {
+            if (SelectedElement is FolderElement folder)
+            {
+                IPdfEditViewModel pdfEdit = _getPdfEdit();
+
+                if (pdfEdit.ShowDialog() == true)
+                {
+                    if (pdfEdit.PdfData is not null)
+                    {
+                        await folder.AddPdfAsync(pdfEdit.Name, pdfEdit.PdfData);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            SendUiMessage?.Invoke(($"Ny feilet. Feilmelding:\n\n{ex.Message}", "Feilmelding", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK));
+        }
+    }
+
     private async Task Edit()
     {
         try
@@ -358,6 +385,25 @@ public class MainViewModel : ObservableObject
                     if (htmlEdit.Html != oldHtml)
                     {
                         await html.SetHtmlAsync(htmlEdit.Html);
+                    }
+                }
+            }
+            else if (SelectedElement is PdfElement pdf)
+            {
+                IPdfEditViewModel pdfEdit = _getPdfEdit();
+                pdfEdit.Name = pdf.DatabaseElement.Name;
+                pdfEdit.PdfData = pdf.PdfData;
+
+                if (pdfEdit.ShowDialog() == true)
+                {
+                    if (pdf.DatabaseElement.Name != pdfEdit.Name)
+                    {
+                        await pdf.DatabaseElement.SetNameAsync(pdfEdit.Name);
+                    }
+
+                    if (pdfEdit.PdfIsChanged && pdfEdit.PdfData is not null)
+                    {
+                        await pdf.DatabaseElement.SetContentAsync(pdfEdit.PdfData);
                     }
                 }
             }

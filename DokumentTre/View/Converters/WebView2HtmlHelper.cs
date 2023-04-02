@@ -1,8 +1,5 @@
 ﻿using Microsoft.Web.WebView2.Wpf;
-using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
 
 namespace DokumentTre.View.Converters;
 

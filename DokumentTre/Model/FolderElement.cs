@@ -68,6 +68,9 @@ public class FolderElement : BaseElement
                 case DocumentTypes.HtmlDocument:
                     Children.Add(new HtmlElement(Child, this));
                     break;
+                case DocumentTypes.PdfDocument:
+                    Children.Add(new PdfElement(Child, this));
+                    break;
                 default:
                     throw new Exception("Database error.");
             }
@@ -122,6 +125,16 @@ public class FolderElement : BaseElement
         htmlElement.IsSelected = true;
 
         return htmlElement;
+    }
+
+    public async Task<PdfElement> AddPdfAsync(string name, byte[] pdfData)
+    {
+        PdfElement pdfElement = new(await DatabaseElement.CreateChildAsync(name, DocumentTypes.PdfDocument, pdfData), this);
+        Children.Add(pdfElement);
+        IsExpanded = true;
+        pdfElement.IsSelected = true;
+
+        return pdfElement;
     }
 
     public async Task DeleteChildAsync(BaseElement child)

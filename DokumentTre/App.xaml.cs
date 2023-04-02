@@ -30,6 +30,7 @@ public partial class App : Application
         services.AddTransient<IRichTextEditViewModel, RichTextEditView>();
         services.AddTransient<IImageEditViewModel, ImageEditView>();
         services.AddTransient<IHtmlEditViewModel, HtmlEditView>();
+        services.AddTransient<IPdfEditViewModel, PdfEditView>();
 
         // Windows factory
         services.AddSingleton<Func<IFolderEditViewModel>>(x => () => x.GetRequiredService<IFolderEditViewModel>());
@@ -37,6 +38,7 @@ public partial class App : Application
         services.AddSingleton<Func<IRichTextEditViewModel>>(x => () => x.GetRequiredService<IRichTextEditViewModel>());
         services.AddSingleton<Func<IImageEditViewModel>>(x => () => x.GetRequiredService<IImageEditViewModel>());
         services.AddSingleton<Func<IHtmlEditViewModel>>(x => () => x.GetRequiredService<IHtmlEditViewModel>());
+        services.AddSingleton<Func<IPdfEditViewModel>>(x => () => x.GetRequiredService<IPdfEditViewModel>());
     }
 
     private void Application_Startup(object sender, StartupEventArgs e)

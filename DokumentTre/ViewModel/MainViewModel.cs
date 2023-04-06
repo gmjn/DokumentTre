@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DocumentRepository;
+using DokumentTre.Factory;
 using DokumentTre.Model;
 using System;
 using System.ComponentModel;
@@ -18,12 +19,7 @@ public class MainViewModel : ObservableObject
     private BaseElement? _selectedElement;
     private bool _isEnabled = true;
 
-    private readonly Func<IFolderEditViewModel> _getFolderEdit;
-    private readonly Func<ITextEditViewModel> _getTextEdit;
-    private readonly Func<IRichTextEditViewModel> _getRichTextEdit;
-    private readonly Func<IImageEditViewModel> _getImageEdit;
-    private readonly Func<IHtmlEditViewModel> _getHtmlEdit;
-    private readonly Func<IPdfEditViewModel> _getPdfEdit;
+    private readonly IFactory _windowFactory;
 
     public IRelayCommand NewButtonCommand { get; }
     public ICommand NewFolderCommand { get; }
@@ -69,15 +65,10 @@ public class MainViewModel : ObservableObject
         }
     }
 
-    public MainViewModel(IRepository documentDatabase, Func<IFolderEditViewModel> getFolderEdit, Func<ITextEditViewModel> getTextEdit, Func<IRichTextEditViewModel> getRichTextEdit, Func<IImageEditViewModel> getImageEdit, Func<IHtmlEditViewModel> getHtmlEdit, Func<IPdfEditViewModel> getPdfEdit)
+    public MainViewModel(IRepository documentDatabase, IFactory windowFactory)
     {
         _documentDatabase = documentDatabase;
-        _getFolderEdit = getFolderEdit;
-        _getTextEdit = getTextEdit;
-        _getRichTextEdit = getRichTextEdit;
-        _getImageEdit = getImageEdit;
-        _getHtmlEdit = getHtmlEdit;
-        _getPdfEdit = getPdfEdit;
+        _windowFactory = windowFactory;
         DocumentRoot = Array.Empty<FolderElement>();
 
         NewButtonCommand = new RelayCommand(() => { }, () => SelectedElement is FolderElement);
@@ -137,7 +128,7 @@ public class MainViewModel : ObservableObject
         {
             if (SelectedElement is FolderElement folder)
             {
-                IFolderEditViewModel folderEdit = _getFolderEdit();
+                IFolderEditViewModel folderEdit = _windowFactory.Create<IFolderEditViewModel>();
                 if (folderEdit.ShowDialog() == true)
                 {
                     await folder.AddFolderAsync(folderEdit.Name, folderEdit.Text);
@@ -156,7 +147,7 @@ public class MainViewModel : ObservableObject
         {
             if (SelectedElement is FolderElement folder)
             {
-                ITextEditViewModel textEdit = _getTextEdit();
+                ITextEditViewModel textEdit = _windowFactory.Create<ITextEditViewModel>();
                 if (textEdit.ShowDialog() == true)
                 {
                     await folder.AddTextAsync(textEdit.Name, textEdit.Text);
@@ -175,7 +166,7 @@ public class MainViewModel : ObservableObject
         {
             if (SelectedElement is FolderElement folder)
             {
-                IRichTextEditViewModel richTextEdit = _getRichTextEdit();
+                IRichTextEditViewModel richTextEdit = _windowFactory.Create< IRichTextEditViewModel>();
                 if (richTextEdit.ShowDialog() == true)
                 {
                     await folder.AddRichTextAsync(richTextEdit.Name, richTextEdit.Text);
@@ -194,7 +185,7 @@ public class MainViewModel : ObservableObject
         {
             if (SelectedElement is FolderElement folder)
             {
-                IImageEditViewModel imageEdit = _getImageEdit();
+                IImageEditViewModel imageEdit = _windowFactory.Create<IImageEditViewModel>();
 
                 if (imageEdit.ShowDialog() == true)
                 {
@@ -217,7 +208,7 @@ public class MainViewModel : ObservableObject
         {
             if (SelectedElement is FolderElement folder)
             {
-                IHtmlEditViewModel htmlEdit = _getHtmlEdit();
+                IHtmlEditViewModel htmlEdit = _windowFactory.Create<IHtmlEditViewModel>();
 
                 htmlEdit.Html = """
                     <!DOCTYPE html>
@@ -263,7 +254,7 @@ public class MainViewModel : ObservableObject
         {
             if (SelectedElement is FolderElement folder)
             {
-                IPdfEditViewModel pdfEdit = _getPdfEdit();
+                IPdfEditViewModel pdfEdit = _windowFactory.Create<IPdfEditViewModel>();
 
                 if (pdfEdit.ShowDialog() == true)
                 {
@@ -286,7 +277,7 @@ public class MainViewModel : ObservableObject
         {
             if (SelectedElement is FolderElement folder)
             {
-                IFolderEditViewModel folderEdit = _getFolderEdit();
+                IFolderEditViewModel folderEdit = _windowFactory.Create<IFolderEditViewModel>();
                 folderEdit.Name = folder.DatabaseElement.Name;
                 string oldText = await folder.GetTextAsync();
                 folderEdit.Text = oldText;
@@ -306,7 +297,7 @@ public class MainViewModel : ObservableObject
             }
             else if (SelectedElement is TextElement text)
             {
-                ITextEditViewModel textEdit = _getTextEdit();
+                ITextEditViewModel textEdit = _windowFactory.Create<ITextEditViewModel>();
                 textEdit.Name = text.DatabaseElement.Name;
                 string oldText = await text.GetTextAsync();
                 textEdit.Text = oldText;
@@ -326,7 +317,7 @@ public class MainViewModel : ObservableObject
             }
             else if (SelectedElement is RichTextElement richText)
             {
-                IRichTextEditViewModel richTextEdit = _getRichTextEdit();
+                IRichTextEditViewModel richTextEdit = _windowFactory.Create<IRichTextEditViewModel>();
                 richTextEdit.Name = richText.DatabaseElement.Name;
                 richTextEdit.Text = await richText.DatabaseElement.GetContentAsync();
 
@@ -345,7 +336,7 @@ public class MainViewModel : ObservableObject
             }
             else if (SelectedElement is ImageElement image)
             {
-                IImageEditViewModel imageEdit = _getImageEdit();
+                IImageEditViewModel imageEdit = _windowFactory.Create<IImageEditViewModel>();
                 imageEdit.Name = image.DatabaseElement.Name;
                 imageEdit.Image = await Task.Run(() => image.Image);
                 DocumentTypes oldDocumentType = imageEdit.Image.Value.type;
@@ -370,7 +361,7 @@ public class MainViewModel : ObservableObject
             }
             else if (SelectedElement is HtmlElement html)
             {
-                IHtmlEditViewModel htmlEdit = _getHtmlEdit();
+                IHtmlEditViewModel htmlEdit = _windowFactory.Create<IHtmlEditViewModel>();
                 htmlEdit.Name = html.DatabaseElement.Name;
                 string oldHtml = await html.GetHtmlAsync();
                 htmlEdit.Html = oldHtml;
@@ -390,7 +381,7 @@ public class MainViewModel : ObservableObject
             }
             else if (SelectedElement is PdfElement pdf)
             {
-                IPdfEditViewModel pdfEdit = _getPdfEdit();
+                IPdfEditViewModel pdfEdit = _windowFactory.Create<IPdfEditViewModel>();
                 pdfEdit.Name = pdf.DatabaseElement.Name;
                 pdfEdit.PdfData = pdf.PdfData;
 

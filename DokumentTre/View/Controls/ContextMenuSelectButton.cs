@@ -8,6 +8,11 @@ public class ContextMenuSelectButton : Button
 {
     public static readonly DependencyProperty DropDownProperty = DependencyProperty.Register("DropDown", typeof(ContextMenu), typeof(ContextMenuSelectButton), new UIPropertyMetadata(null));
 
+    public ContextMenuSelectButton()
+    {
+        FlowDirection = FlowDirection.RightToLeft;
+    }
+
     public ContextMenu DropDown
     {
         get { return (ContextMenu)GetValue(DropDownProperty); }
@@ -20,6 +25,7 @@ public class ContextMenuSelectButton : Button
         {
             DropDown.PlacementTarget = this;
             DropDown.Placement = PlacementMode.Bottom;
+            DropDown.FlowDirection = FlowDirection.LeftToRight;
 
             DropDown.IsOpen = true;
         }

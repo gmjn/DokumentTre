@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 namespace DokumentTre.View.Converters;
 
 [ValueConversion(typeof((byte[], DocumentTypes)), typeof(BitmapSource))]
-public class ByteToBitmapConverter : IValueConverter
+public sealed class ByteToBitmapConverter : IValueConverter
 {
     public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
@@ -16,15 +16,12 @@ public class ByteToBitmapConverter : IValueConverter
         {
             using MemoryStream memoryStream = new(data);
 
-            switch (documentType)
+            return documentType switch
             {
-                case DocumentTypes.PngImage:
-                    return new PngBitmapDecoder(memoryStream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad).Frames[0];
-                case DocumentTypes.JpgImage:
-                    return new JpegBitmapDecoder(memoryStream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad).Frames[0];
-                default:
-                    return null;
-            }
+                DocumentTypes.PngImage or DocumentTypes.PngImageScaleBoth => new PngBitmapDecoder(memoryStream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad).Frames[0],
+                DocumentTypes.JpgImage or DocumentTypes.JpgImageScaleBoth => new JpegBitmapDecoder(memoryStream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad).Frames[0],
+                _ => null,
+            };
         }
         else return null;
     }

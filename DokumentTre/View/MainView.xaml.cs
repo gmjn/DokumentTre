@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace DokumentTre.View;
 
-public partial class MainView : Window
+public sealed partial class MainView : Window
 {
     private readonly MainViewModel _viewModel;
 

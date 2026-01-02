@@ -24,7 +24,8 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Text="Navn:" Margin="10"/>
-        <TextBox x:Name="TextBoxName" Margin="10" Grid.Column="1" Grid.ColumnSpan="5" TextChanged="TextBoxName_TextChanged"/>
+        <TextBox x:Name="TextBoxName" Margin="10" Grid.Column="1" Grid.ColumnSpan="4" TextChanged="TextBoxName_TextChanged"/>
+        <CheckBox x:Name="ChecBoxSkalerOpp" Content="Skaler opp" Grid.Column="5" Margin="10" />
         <Image Source="{Binding Image, Converter={StaticResource ByteToBitmapConverter}}" Margin="5,0,5,5" StretchDirection="DownOnly" Grid.Row="1" Grid.ColumnSpan="6"/>
 
         <Button x:Name="ButtonOpen" Content="Åpne bilde" Width="100" Height="20" Margin="10" Grid.Column="1" Grid.Row="2" Click="ButtonOpen_Click"/>

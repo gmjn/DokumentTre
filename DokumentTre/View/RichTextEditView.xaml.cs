@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 
 namespace DokumentTre.View;
 
-public partial class RichTextEditView : Window, IRichTextEditViewModel
+public sealed partial class RichTextEditView : Window, IRichTextEditViewModel
 {
     private bool _textIsChanged = false;
 
@@ -149,16 +149,19 @@ public partial class RichTextEditView : Window, IRichTextEditViewModel
         if (RichTextBoxContent.Selection is not null)
         {
             TextRange textRange = RichTextBoxContent.Selection;
-            var currentTextDecoration = textRange.GetPropertyValue(Inline.TextDecorationsProperty);
+            var value = textRange.GetPropertyValue(Inline.TextDecorationsProperty);
 
-            if (currentTextDecoration != DependencyProperty.UnsetValue)
+            if (value is TextDecorationCollection decorations && decorations.Contains(TextDecorations.Strikethrough[0]))
             {
-                textRange.ApplyPropertyValue(Inline.TextDecorationsProperty, ((TextDecorationCollection)currentTextDecoration == TextDecorations.Strikethrough) ? new TextDecorationCollection() : TextDecorations.Strikethrough);
+                // Remove strikethrough
+                textRange.ApplyPropertyValue(Inline.TextDecorationsProperty, null);
             }
             else
             {
+                // Add strikethrough
                 textRange.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Strikethrough);
             }
+
         }
     }
 

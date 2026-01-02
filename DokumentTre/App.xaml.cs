@@ -3,12 +3,11 @@ using DokumentTre.Factory;
 using DokumentTre.View;
 using DokumentTre.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Windows;
 
 namespace DokumentTre;
 
-public partial class App : Application
+public sealed partial class App : Application
 {
     public ServiceProvider ServiceProvider { get; private set; }
 

@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace DokumentTre.View;
 
-public partial class HtmlEditView : Window, IHtmlEditViewModel
+public sealed partial class HtmlEditView : Window, IHtmlEditViewModel
 {
     private bool _textIsChanged = false;
 

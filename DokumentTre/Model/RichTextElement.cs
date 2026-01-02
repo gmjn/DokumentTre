@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace DokumentTre.Model;
 
-public class RichTextElement : BaseElement
+public sealed class RichTextElement : BaseElement
 {
     private static PropertyChangedEventArgs? s_richTextDataChangedEventArgs;
 

@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace DokumentTre.Model;
 
-public class PdfElement : BaseElement
+public sealed class PdfElement : BaseElement
 {
     private static PropertyChangedEventArgs? s_pdfDataChangedEventArgs;
 

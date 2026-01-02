@@ -133,7 +133,7 @@ public class RepositoryItem : IRepositoryItem, INotifyPropertyChanged
         {
             if (reader.IsDBNull(0))
             {
-                return Array.Empty<byte>();
+                return [];
             }
             else
             {

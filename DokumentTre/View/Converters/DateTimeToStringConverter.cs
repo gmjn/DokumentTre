@@ -5,7 +5,7 @@ using System.Windows.Data;
 namespace DokumentTre.View.Converters;
 
 [ValueConversion(typeof(DateTime), typeof(string))]
-public class DateTimeToStringConverter : IValueConverter
+public sealed class DateTimeToStringConverter : IValueConverter
 {
     public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {

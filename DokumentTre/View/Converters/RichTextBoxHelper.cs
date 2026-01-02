@@ -9,7 +9,7 @@ namespace DokumentTre.View.Converters;
 // Dette er et property som det kan bindes til. Noe som ikke er mulig
 // i property Document i RichTextBox (er ikke dependecy property).
 // Hvis flow som er bindable attatched property. 
-public class RichTextBoxHelper : DependencyObject
+public sealed class RichTextBoxHelper : DependencyObject
 {
     public static byte[] GetFlowDocument(UIElement target)
     {
@@ -29,7 +29,6 @@ public class RichTextBoxHelper : DependencyObject
             typeof(byte[]),
             typeof(RichTextBoxHelper),
             new FrameworkPropertyMetadata { PropertyChangedCallback = FlowDocumentPropertyChanged });
-
 
     private static void FlowDocumentPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
     {

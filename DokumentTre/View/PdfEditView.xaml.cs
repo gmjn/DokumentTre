@@ -9,7 +9,7 @@ using System.Windows.Controls;
 namespace DokumentTre.View;
 
 
-public partial class PdfEditView : Window, IPdfEditViewModel, INotifyPropertyChanged
+public sealed partial class PdfEditView : Window, IPdfEditViewModel, INotifyPropertyChanged
 {
     byte[]? _pdfData;
     private bool _pdfIsChanged = false;

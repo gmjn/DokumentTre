@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace DokumentTre.Model;
 
-public class TextElement : BaseElement
+public sealed class TextElement : BaseElement
 {
     private static PropertyChangedEventArgs? s_textChangedEventArgs;
 

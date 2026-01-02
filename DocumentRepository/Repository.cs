@@ -86,11 +86,8 @@ public sealed class Repository : IRepository, IDisposable, IAsyncDisposable
 
     public void Dispose()
     {
-        if ( _sqliteConnection is not null )
-        {
-            _sqliteConnection.Dispose();
-            _sqliteConnection = null;
-        }
+        _sqliteConnection?.Dispose();
+        _sqliteConnection = null;
     }
 
     public async ValueTask DisposeAsync()

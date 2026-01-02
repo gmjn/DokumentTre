@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace DokumentTre.Model;
 
-public class ImageElement : BaseElement
+public sealed class ImageElement : BaseElement
 {
     private static PropertyChangedEventArgs? s_imageChangedEventArgs;
 

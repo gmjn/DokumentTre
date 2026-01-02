@@ -1,6 +1,5 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
-using System;
 using System.IO;
 using System.Windows;
 
@@ -8,10 +7,10 @@ namespace DokumentTre.View.Converters;
 
 // Hjelper for å kunne legge til Pdf som attatched property.
 // Dette er et property som det kan bindes til. 
-public class WebView2PdfHelper : DependencyObject
+public sealed class WebView2PdfHelper : DependencyObject
 {
     private static int s_counter = 0;
-    private static byte[] s_data = Array.Empty<byte>();
+    private static byte[] s_data = [];
 
     public static byte[] GetPdfDocument(UIElement target)
     {
@@ -31,7 +30,6 @@ public class WebView2PdfHelper : DependencyObject
             typeof(byte[]),
             typeof(WebView2PdfHelper),
             new FrameworkPropertyMetadata { PropertyChangedCallback = PdfDocumentPropertyChanged });
-
 
     private async static void PdfDocumentPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
     {
@@ -62,7 +60,7 @@ public class WebView2PdfHelper : DependencyObject
             }
             else
             {
-                s_data = Array.Empty<byte>();
+                s_data = [];
                 webView.NavigateToString("");
             }
         }

@@ -4,7 +4,7 @@ using System.Windows.Controls.Primitives;
 
 namespace DokumentTre.View.Controls;
 
-public class ContextMenuSelectButton : Button
+public sealed class ContextMenuSelectButton : Button
 {
     public static readonly DependencyProperty DropDownProperty = DependencyProperty.Register("DropDown", typeof(ContextMenu), typeof(ContextMenuSelectButton), new UIPropertyMetadata(null));
 

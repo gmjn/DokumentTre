@@ -21,29 +21,27 @@ public abstract class BaseElement : INotifyPropertyChanged
 
     public FolderElement? Parent { get; }
 
-    private bool _isExpanded;
     public bool IsExpanded
     {
-        get => _isExpanded;
+        get => field;
         set
         {
-            if (_isExpanded != value)
+            if (field != value)
             {
-                _isExpanded = value;
+                field = value;
                 PropertyChanged?.Invoke(this, s_isExpandedChangedEventArgs ??= new PropertyChangedEventArgs(nameof(IsExpanded)));
             }
         }
     }
 
-    private bool _isSelected;
     public bool IsSelected
     {
-        get => _isSelected;
+        get => field;
         set
         {
-            if (_isSelected != value)
+            if (field != value)
             {
-                _isSelected = value;
+                field = value;
                 PropertyChanged?.Invoke(this, s_isSelectedChangedEventArgs ??= new PropertyChangedEventArgs(nameof(IsSelected)));
             }
         }
@@ -60,13 +58,13 @@ public abstract class BaseElement : INotifyPropertyChanged
     {
         if (text.Length == 0)
         {
-            return Array.Empty<byte>();
+            return [];
         }
 
         using MemoryStream compressedStream = new();
         using (BrotliStream brotliStream = new(compressedStream, CompressionLevel.Optimal, true))
         {
-            using StreamWriter streamWriter = new StreamWriter(brotliStream, leaveOpen: true);
+            using StreamWriter streamWriter = new(brotliStream, leaveOpen: true);
             streamWriter.Write(text);
         }
 

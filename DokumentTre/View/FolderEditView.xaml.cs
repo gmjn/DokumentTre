@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace DokumentTre.View;
 
-public partial class FolderEditView : Window, IFolderEditViewModel
+public sealed partial class FolderEditView : Window, IFolderEditViewModel
 {
     private bool _textIsChanged = false;
 

@@ -7,6 +7,7 @@
     <Application.Resources>
         <converters:DateTimeToStringConverter x:Key="DateTimeToStringConverter"/>
         <converters:ByteToBitmapConverter x:Key="ByteToBitmapConverter"/>
+        <converters:DocumentTypesToStretchDirectionConverter x:Key="DocumentTypesToStretchDirectionConverter"/>
 
         <Style x:Key="MenuButtonStyle" TargetType="Button">
             <Setter Property="IsTabStop" Value="False"/>

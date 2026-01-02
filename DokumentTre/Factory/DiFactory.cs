@@ -3,7 +3,7 @@ using System;
 
 namespace DokumentTre.Factory;
 
-public class DiFactory : IFactory
+public sealed class DiFactory : IFactory
 {
     private readonly IServiceProvider _serviceProvider;
 

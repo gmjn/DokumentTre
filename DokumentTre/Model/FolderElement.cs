@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace DokumentTre.Model;
 
-public class FolderElement : BaseElement
+public sealed class FolderElement : BaseElement
 {
     private static PropertyChangedEventArgs? s_textChangedEventArgs;
 
     public FolderElement(IRepositoryItem databaseElement, FolderElement? parent) : base(databaseElement, parent)
     {
-        Children = new ObservableCollection<BaseElement>();
+        Children = [];
         databaseElement.ContentChanged += NotifyTextChanged;
     }
 
@@ -60,6 +60,8 @@ public class FolderElement : BaseElement
                     break;
                 case DocumentTypes.JpgImage:
                 case DocumentTypes.PngImage:
+                case DocumentTypes.JpgImageScaleBoth:
+                case DocumentTypes.PngImageScaleBoth:
                     Children.Add(new ImageElement(Child, this));
                     break;
                 case DocumentTypes.RichTextDocument:

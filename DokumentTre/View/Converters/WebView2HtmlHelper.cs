@@ -5,7 +5,7 @@ namespace DokumentTre.View.Converters;
 
 // Hjelper for å kunne legge til HTML som attatched property.
 // Dette er et property som det kan bindes til.
-public class WebView2HtmlHelper : DependencyObject
+public sealed class WebView2HtmlHelper : DependencyObject
 {
     public static string GetHtmlDocument(UIElement target)
     {
@@ -22,7 +22,6 @@ public class WebView2HtmlHelper : DependencyObject
             typeof(string),
             typeof(WebView2HtmlHelper),
             new FrameworkPropertyMetadata { PropertyChangedCallback = HtmlDocumentPropertyChanged });
-
 
     private async static void HtmlDocumentPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
     {

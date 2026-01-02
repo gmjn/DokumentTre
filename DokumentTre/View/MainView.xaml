@@ -145,7 +145,7 @@
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type model:ImageElement}">
-                        <Image Source="{Binding Image, IsAsync=True, Converter={StaticResource ByteToBitmapConverter}}" Margin="5,0,5,5" StretchDirection="DownOnly"/>
+                        <Image Source="{Binding Image, IsAsync=True, Converter={StaticResource ByteToBitmapConverter}}" Margin="5,0,5,5" StretchDirection="{Binding DatabaseElement.DocumentType, Converter={StaticResource DocumentTypesToStretchDirectionConverter}}" />
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type model:RichTextElement}">

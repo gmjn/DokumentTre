@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace DokumentTre.ViewModel;
 
-public class MainViewModel : ObservableObject
+public sealed class MainViewModel : ObservableObject
 {
     public string? DatabaseName { get; set; }
 
@@ -69,7 +69,7 @@ public class MainViewModel : ObservableObject
     {
         _documentDatabase = documentDatabase;
         _windowFactory = windowFactory;
-        DocumentRoot = Array.Empty<FolderElement>();
+        DocumentRoot = [];
 
         NewButtonCommand = new RelayCommand(() => { }, () => SelectedElement is FolderElement);
         NewFolderCommand = new AsyncRelayCommand(NewFolder);
@@ -93,7 +93,7 @@ public class MainViewModel : ObservableObject
         await _documentDatabase.OpenRepositoryAsync(DatabaseName);
 
         FolderElement rootElement = new(_documentDatabase.RootFolder, null);
-        DocumentRoot = new[] { rootElement };
+        DocumentRoot = [rootElement];
         OnPropertyChanged(nameof(DocumentRoot));
         await rootElement.LoadChildrenAsync(true, FolderIsExpanded_Changed);
         DocumentRoot[0].IsExpanded = true;
@@ -348,14 +348,17 @@ public class MainViewModel : ObservableObject
                         await image.DatabaseElement.SetNameAsync(imageEdit.Name);
                     }
 
-                    if (imageEdit.ImageIsChanged && imageEdit.Image.HasValue)
+                    if (imageEdit.Image.HasValue)
                     {
                         if (oldDocumentType != imageEdit.Image.Value.type)
                         {
                             await image.DatabaseElement.SetDocumentTypeAsync(imageEdit.Image.Value.type);
                         }
 
-                        await image.DatabaseElement.SetContentAsync(imageEdit.Image.Value.data);
+                        if (imageEdit.ImageIsChanged)
+                        {
+                            await image.DatabaseElement.SetContentAsync(imageEdit.Image.Value.data);
+                        }
                     }
                 }
             }

@@ -8,5 +8,7 @@ public enum DocumentTypes
     PngImage,
     RichTextDocument,
     HtmlDocument,
-    PdfDocument
+    PdfDocument,
+    JpgImageScaleBoth,
+    PngImageScaleBoth
 }
